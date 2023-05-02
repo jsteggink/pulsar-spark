@@ -23,7 +23,7 @@
   </parent>
 
   <groupId>io.streamnative.connectors</groupId>
-  <artifactId>pulsar-spark-connector_2.12</artifactId>
+  <artifactId>pulsar-spark-connector_2.13</artifactId>
   <version>3.2.0.2</version>
   <name>StreamNative :: Pulsar Spark Connector</name>
   <url>https://pulsar.apache.org</url>
@@ -56,9 +56,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.scm.id>snbot-github</project.scm.id>
-    <javac.target>1.8</javac.target>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <javac.target>11</javac.target>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
     <redirectTestOutputToFile>true</redirectTestOutputToFile>
     <testRetryCount>2</testRetryCount>
     <!-- for now, not running scalafmt as part of default verify pipeline -->
@@ -66,24 +66,24 @@
 
     <!-- dependencies -->
     <!-- latest version from apache pulsar -->
-    <pulsar.version>2.10.2</pulsar.version>
-    <scala.version>2.12.10</scala.version>
-    <scala.binary.version>2.12</scala.binary.version>
+    <pulsar.version>2.10.3</pulsar.version>
+    <scala.version>2.13.8</scala.version>
+    <scala.binary.version>2.13</scala.binary.version>
     <scalatest.version>3.2.14</scalatest.version>
-    <spark.version>3.2.2</spark.version>
+    <spark.version>3.4.0</spark.version>
     <commons-io.version>2.11.0</commons-io.version>
     <testcontainers.version>1.17.6</testcontainers.version>
 
     <!-- plugin dependencies -->
-    <maven.version>3.5.4</maven.version>
+    <maven.version>3.9.1</maven.version>
     <mvn-scalafmt.version>1.1.1640084764.9f463a9</mvn-scalafmt.version>
     <license-maven-plugin.version>4.1</license-maven-plugin.version>
-    <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
+    <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
     <maven-dependency-plugin.version>3.3.0</maven-dependency-plugin.version>
     <maven-shade-plugin.version>3.4.0</maven-shade-plugin.version>
     <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
-    <scala-maven-plugin.version>4.7.2</scala-maven-plugin.version>
+    <scala-maven-plugin.version>4.8.1</scala-maven-plugin.version>
     <scalatest-maven-plugin.version>2.2.0</scalatest-maven-plugin.version>
     <scalastyle-maven-plugin.version>1.0.0</scalastyle-maven-plugin.version>
     <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
@@ -305,7 +305,7 @@
             <arg>-deprecation</arg>
             <arg>-feature</arg>
             <arg>-explaintypes</arg>
-            <arg>-Yno-adapted-args</arg>
+            <!--<arg>-Yno-adapted-args</arg>-->
           </args>
           <jvmArgs>
             <jvmArg>-Xms1024m</jvmArg>

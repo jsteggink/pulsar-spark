@@ -51,7 +51,7 @@ private[pulsar] class PulsarMicroBatchReader(
   private var endTopicOffsets: Map[String, MessageId] = _
   private var stopped = false
 
-  val reportDataLoss = reportDataLossFunc(failOnDataLoss)
+  val reportDataLoss: String => Unit = reportDataLossFunc(failOnDataLoss)
 
   private lazy val initialTopicOffsets: SpecificPulsarOffset = {
     val metadataLog =
@@ -63,7 +63,7 @@ private[pulsar] class PulsarMicroBatchReader(
     SpecificPulsarOffset(JsonUtils.topicOffsets(json))
   }
 
-  lazy val pulsarSchema: SchemaInfo = pulsarHelper.getPulsarSchema()
+  lazy val pulsarSchema: SchemaInfo = pulsarHelper.getPulsarSchema
 
   override def planInputPartitions(start: Offset, end: Offset): Array[InputPartition] = {
     val newPartitions = endTopicOffsets.keySet.diff(startTopicOffsets.keySet)

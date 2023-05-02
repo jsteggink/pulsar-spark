@@ -49,7 +49,7 @@ private[pulsar] case class PulsarHelper(
     extends Closeable
     with Logging {
 
-  import scala.collection.JavaConverters._
+  import scala.jdk.CollectionConverters._
 
   protected var client: PulsarClientImpl = CachedPulsarClient.getOrCreate(clientConf)
 
@@ -162,30 +162,30 @@ private[pulsar] case class PulsarHelper(
     inferredSchema
   }
 
-  def getPulsarSchema(): SchemaInfo = {
+  def getPulsarSchema: SchemaInfo = {
     getTopics()
-    allowDifferentTopicSchemas match {
-      case false =>
-        if (topics.size > 0) {
-          val schemas = topics.map { tp =>
-            getPulsarSchema(tp)
-          }
-          val sset = schemas.toSet
-          if (sset.size != 1) {
-            throw new IllegalArgumentException(
-              "Topics to read must share identical schema. Consider setting " +
-                s"'$AllowDifferentTopicSchemas' to 'false' to read topics with empty " +
-                s"schemas instead. We got ${sset.size} distinct " +
-                s"schemas:[${sset.mkString(", ")}]")
-          } else {
-            sset.head
-          }
-        } else {
-          // if no topic exists, and we are getting schema,
-          // then auto created topic has schema of None
-          SchemaUtils.emptySchemaInfo()
+    if (allowDifferentTopicSchemas) {
+      SchemaUtils.emptySchemaInfo()
+    } else {
+      if (topics.nonEmpty) {
+        val schemas = topics.map { tp =>
+          getPulsarSchema(tp)
         }
-      case true => SchemaUtils.emptySchemaInfo()
+        val sset = schemas.toSet
+        if (sset.size != 1) {
+          throw new IllegalArgumentException(
+            "Topics to read must share identical schema. Consider setting " +
+              s"'$AllowDifferentTopicSchemas' to 'false' to read topics with empty " +
+              s"schemas instead. We got ${sset.size} distinct " +
+              s"schemas:[${sset.mkString(", ")}]")
+        } else {
+          sset.head
+        }
+      } else {
+        // if no topic exists, and we are getting schema,
+        // then auto created topic has schema of None
+        SchemaUtils.emptySchemaInfo()
+      }
     }
   }
 
@@ -283,7 +283,7 @@ private[pulsar] case class PulsarHelper(
     allTopics.asScala
       .map(TopicName.get(_).toString)
       .filter(tp => shortenedTopicsPattern.matcher(tp.split("\\:\\/\\/")(1)).matches())
-  }
+  }.toSeq
 
   private def waitForTopicIfNeeded(): Unit = {
     if (caseInsensitiveParameters.getOrElse(WaitingForNonExistedTopic, "false").toBoolean) {

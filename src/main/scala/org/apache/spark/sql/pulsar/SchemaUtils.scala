@@ -16,8 +16,8 @@ package org.apache.spark.sql.pulsar
 import java.io.{Externalizable, ObjectInput, ObjectOutput}
 import java.nio.charset.StandardCharsets
 
-import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
+import scala.jdk.CollectionConverters._
 
 import org.apache.pulsar.client.api.{Schema => PSchema}
 import org.apache.pulsar.client.api.schema.{GenericRecord, GenericSchema}
@@ -123,7 +123,7 @@ private[pulsar] object SchemaUtils {
   case class TypeNullable(dataType: DataType, nullable: Boolean)
 
   def pulsarSourceSchema(si: SchemaInfo): StructType = {
-    var mainSchema: ListBuffer[StructField] = ListBuffer.empty
+    val mainSchema: ListBuffer[StructField] = ListBuffer.empty
     val typeNullable = si2SqlType(si)
     typeNullable.dataType match {
       case st: StructType =>
@@ -132,7 +132,7 @@ private[pulsar] object SchemaUtils {
         mainSchema += StructField("value", t, nullable = typeNullable.nullable)
     }
     mainSchema ++= metaDataFields
-    StructType(mainSchema)
+    StructType(mainSchema.toSeq)
   }
 
   def si2SqlType(si: SchemaInfo): TypeNullable = {
@@ -200,7 +200,7 @@ private[pulsar] object SchemaUtils {
           StructField(f.name, typeNullable.dataType, typeNullable.nullable)
         }
 
-        TypeNullable(StructType(fields), nullable = false)
+        TypeNullable(StructType(fields.toSeq), nullable = false)
 
       case ARRAY =>
         val typeNullable: TypeNullable =
@@ -242,7 +242,7 @@ private[pulsar] object SchemaUtils {
                 StructField(s"member$i", TypeNullable.dataType, nullable = true)
               }
 
-              TypeNullable(StructType(fields), nullable = false)
+              TypeNullable(StructType(fields.toSeq), nullable = false)
           }
         }
       case other => throw new IncompatibleSchemaException(s"Unsupported type $other")

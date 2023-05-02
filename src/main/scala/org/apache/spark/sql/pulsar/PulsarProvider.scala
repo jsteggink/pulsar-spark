@@ -149,7 +149,7 @@ private[pulsar] class PulsarProvider
           pollTimeoutMs(caseInsensitiveParams),
           reportDataLossFunc(failOnDataLoss(caseInsensitiveParams))))
 
-      val pulsarSchema = pulsarHelper.getPulsarSchema()
+      val pulsarSchema = pulsarHelper.getPulsarSchema
       val schema = SchemaUtils.pulsarSourceSchema(pulsarSchema)
       (startingOffset, endingOffset, schema, pulsarSchema)
     }
